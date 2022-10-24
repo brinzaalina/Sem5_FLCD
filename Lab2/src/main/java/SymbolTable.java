@@ -13,15 +13,15 @@ public class SymbolTable {
         this.stringConstantsHashTable = new HashTable<>(size);
     }
 
-    public Pair<Integer, Integer> addIdentifier(String name) {
+    public Pair<Integer, Integer> addIdentifier(String name) throws Exception {
         return identifiersHashTable.add(name);
     }
 
-    public Pair<Integer, Integer> addIntConstant(int constant) {
+    public Pair<Integer, Integer> addIntConstant(int constant) throws Exception {
         return intConstantsHashTable.add(constant);
     }
 
-    public Pair<Integer, Integer> addStringConstant(String constant) {
+    public Pair<Integer, Integer> addStringConstant(String constant) throws Exception {
         return stringConstantsHashTable.add(constant);
     }
 

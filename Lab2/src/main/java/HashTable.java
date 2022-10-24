@@ -40,13 +40,13 @@ public class HashTable<T> {
         return hashValue;
     }
 
-    public Pair<Integer, Integer> add(T key) {
+    public Pair<Integer, Integer> add(T key) throws Exception {
         int hashValue = getHashValue(key);
         if (!items.get(hashValue).contains(key)) {
             items.get(hashValue).add(key);
             return new ImmutablePair<>(hashValue, items.get(hashValue).indexOf(key));
         }
-        return new ImmutablePair<>(-1, -1);
+        throw new Exception("Key " + key + " is already in the table!");
     }
 
     public boolean contains(T key) {
@@ -54,8 +54,7 @@ public class HashTable<T> {
         return items.get(hashValue).contains(key);
     }
 
-    public Pair<Integer, Integer> getPosition
-            (T key) {
+    public Pair<Integer, Integer> getPosition(T key) {
         if (this.contains(key)) {
             int hashValue = getHashValue(key);
             return new ImmutablePair<>(hashValue, items.get(hashValue).indexOf(key));
