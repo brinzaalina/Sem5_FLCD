@@ -112,7 +112,7 @@ public class Scanner {
         return true;
     }
 
-    private boolean checkIfDeclarationOrIdentifier(String possibleIdentifier, String programSubstring) {
+    private boolean checkIfValid(String possibleIdentifier, String programSubstring) {
         if (reservedWords.contains(possibleIdentifier)) {
             return false;
         }
@@ -129,7 +129,7 @@ public class Scanner {
             return false;
         }
         var identifier = matcher.group(1);
-        if (!checkIfDeclarationOrIdentifier(identifier, program.substring(index))) {
+        if (!checkIfValid(identifier, program.substring(index))) {
             return false;
         }
         index += identifier.length();
