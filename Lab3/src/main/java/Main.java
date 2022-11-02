@@ -1,9 +1,3 @@
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.io.IOException;
-import java.util.Objects;
-
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner();

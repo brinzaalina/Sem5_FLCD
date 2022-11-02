@@ -14,8 +14,8 @@ import java.util.regex.Pattern;
 
 public class Scanner {
     private String program;
-    private List<String> tokens;
-    private List<String> reservedWords;
+    private final List<String> tokens;
+    private final List<String> reservedWords;
     private SymbolTable symbolTable;
     private List<Pair<String, Pair<Integer, Integer>>> PIF;
     private int index = 0;
@@ -81,7 +81,7 @@ public class Scanner {
         }
         var stringConstant = matcher.group(0);
         index += stringConstant.length();
-        Pair<Integer, Integer> position = null;
+        Pair<Integer, Integer> position;
         try {
             position = symbolTable.addStringConstant(stringConstant);
         } catch (Exception e) {
@@ -119,8 +119,7 @@ public class Scanner {
         if (Pattern.compile("^[A-Za-z_][A-Za-z0-9_]* \\((int|char|str|real)\\)").matcher(programSubstring).find()) {
             return true;
         }
-        var position = symbolTable.getPositionIdentifier(possibleIdentifier);
-        return !Objects.equals(position, new ImmutablePair<>(-1, -1));
+        return symbolTable.hasIdentifier(possibleIdentifier);
     }
 
     private boolean treatIdentifier() {

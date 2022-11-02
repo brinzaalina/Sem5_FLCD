@@ -1,7 +1,7 @@
 import org.apache.commons.lang3.tuple.Pair;
 
 public class SymbolTable {
-    private int size;
+    private final int size;
     private HashTable<String> identifiersHashTable;
     private HashTable<Integer> intConstantsHashTable;
     private HashTable<String> stringConstantsHashTable;

@@ -5,17 +5,13 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class HashTable<T> {
     private ArrayList<ArrayList<T>> items;
-    private int size;
+    private final int size;
 
     public HashTable(int size) {
         this.size = size;
         this.items = new ArrayList<>();
         for (int i = 0; i < size; i++)
             this.items.add(new ArrayList<>());
-    }
-
-    public int getSize() {
-        return size;
     }
 
     private int hash(int key) {
