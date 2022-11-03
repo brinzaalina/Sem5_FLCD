@@ -144,11 +144,10 @@ public class Scanner {
     }
 
     private boolean treatFromTokenList() {
-        String possibleToken;
+        String possibleToken = program.substring(index).split(" ")[0];
         for (var reservedToken: reservedWords) {
-            possibleToken = program.substring(index).split(" ")[0];
             if (possibleToken.startsWith(reservedToken)) {
-                var regex = "^" + reservedToken + "[a-zA-Z0-9_]+";
+                var regex = "^" + "[a-zA-Z0-9_]*" + reservedToken + "[a-zA-Z0-9_]+";
                 if (Pattern.compile(regex).matcher(possibleToken).find()) {
                     return false;
                 }
@@ -157,7 +156,6 @@ public class Scanner {
                 return true;
             }
         }
-        possibleToken = program.substring(index).split(" ")[0];
         for (var token : tokens) {
             if (Objects.equals(token, possibleToken)) {
                 index += token.length();
