@@ -1,3 +1,5 @@
+package fa;
+
 public class Transition {
     private String from;
     private String to;

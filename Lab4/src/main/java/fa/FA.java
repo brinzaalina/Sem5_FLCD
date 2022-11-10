@@ -1,10 +1,9 @@
-import java.io.IOException;
+package fa;
+
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.File;
 import java.util.regex.Pattern;
 
 public class FA {
@@ -15,14 +14,18 @@ public class FA {
     private List<String> outputStates;
     private String filename;
 
-    public FA(String filename) throws Exception {
+    public FA(String filename) {
         this.filename = filename;
         this.states = new ArrayList<>();
         this.alphabet = new ArrayList<>();
         this.transitions = new ArrayList<>();
         this.initialState = "";
         this.outputStates = new ArrayList<>();
-        init();
+        try {
+            init();
+        } catch (Exception e) {
+            System.out.println("Error when initializingFA");
+        }
     }
 
     private void init() throws Exception {
@@ -151,14 +154,18 @@ public class FA {
             for (Transition transition: transitions) {
                 if (transition.getFrom().equals(currentState) && transition.getLabel().equals(c)) {
                     newState = transition.getTo();
+                    acceptedWord.append(c);
                     break;
                 }
             }
             if (newState == null) {
-                break;
+                if (!outputStates.contains(currentState)) {
+                    return null;
+                } else {
+                    return acceptedWord.toString();
+                }
             }
             currentState = newState;
-            acceptedWord.append(c);
         }
         return acceptedWord.toString();
     }

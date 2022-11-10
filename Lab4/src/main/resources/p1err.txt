@@ -1,0 +1,14 @@
+prog {
+a (int), 2b (int), c (int);
+read(a);
+read(b);
+read(c);
+smallest (int) = a;
+ifi smallest > b {
+	smallest = b;
+}
+if smallest > c {
+	smallest = c;
+}
+print(smallest);
+}
