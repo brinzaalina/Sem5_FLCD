@@ -71,21 +71,6 @@ public class FA {
         }
     }
 
-    private static List<String> stringToListOfChars(String string) {
-        var chars = new ArrayList<String>();
-        for (char c: string.toCharArray()) {
-            chars.add(String.valueOf(c));
-        }
-        return chars;
-    }
-
-    private static String listOfCharsToString(List<String> chars) {
-        StringBuilder string = new StringBuilder();
-        for (String c: chars) {
-            string.append(c);
-        }
-        return string.toString();
-    }
 
     private void printListOfString(String listname, List<String> list) {
         System.out.print(listname + " = {");
@@ -128,7 +113,7 @@ public class FA {
     }
 
     public boolean checkAccepted(String word) {
-        List<String> wordAsList = stringToListOfChars(word);
+        List<String> wordAsList = List.of(word.split(""));
         var currentState = initialState;
         for (String c: wordAsList) {
             var found = false;
@@ -149,7 +134,7 @@ public class FA {
     public String getNextAccepted(String word) {
         var currentState = initialState;
         StringBuilder acceptedWord = new StringBuilder();
-        for (String c: stringToListOfChars(word)) {
+        for (String c: word.split("")) {
             String newState = null;
             for (Transition transition: transitions) {
                 if (transition.getFrom().equals(currentState) && transition.getLabel().equals(c)) {

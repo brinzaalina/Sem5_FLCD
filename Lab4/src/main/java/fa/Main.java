@@ -5,19 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class Main {
-    static public List<String> readSequenceOfLetters() {
-        System.out.println("Number of letters in the word: ");
-        var n = new java.util.Scanner(System.in).nextInt();
-        var list = new ArrayList<String>();
-        for (int i = 0; i < n; i++) {
-            System.out.println("> ");
-            list.add(new java.util.Scanner(System.in).nextLine());
-        }
-        return list;
-    }
-
     public static void main(String[] args) {
-        var fa = new FA("src/main/resources/identifier.in");
+        var fa = new FA("src/main/resources/fa.in");
         System.out.println("1. Print states");
         System.out.println("2. Print alphabet");
         System.out.println("3. Print output states");
