@@ -1,5 +1,5 @@
 N = Program CompoundStatement Statement AssignStatement IfStatement WhileStatement FunctionCallStatement VarStatement ArrStatement Identifier Expression Letter RestOfIdentifier Digit NonZeroDigit Boolean IntExpression StringExpression BooleanExpression IntConstant StringConstant MathematicalOperator LogicalOperator Sign PositiveNumber RestOfNumber StringContent AcceptedSymbol ArrStatement ArrContent IntContentArr StringContentArr Condition RelationalOperator PrintCallArgument ForStatement
-E = ^ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z \n 0 1 2 3 4 5 6 7 8 9 True False + - * / == <= < >= > <> ( ) [ ] # , and or _ space : . ! " --> <-- if while for | len 
+E = ^ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z \n 0 1 2 3 4 5 6 7 8 9 True False + - * / == <= < >= > <> ( ) [ ] # , and or _ space : . ! " --> <-- if while for | len = ?
 S = Program
 Program -> CompoundStatement
 Program -> epsilon
@@ -13,7 +13,7 @@ Statement -> ForStatement
 AssignStatement -> VarStatement
 AssignStatement -> ArrStatement
 VarStatement -> Identifier = Expression
-Identifier -> ^Letter RestOfIdentifier
+Identifier -> ^ Letter RestOfIdentifier
 RestOfIdentifier -> Letter RestOfIdentifier
 RestOfIdentifier -> Digit RestOfIdentifier
 RestOfIdentifier -> epsilon

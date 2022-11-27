@@ -2,7 +2,7 @@ from Grammar import Grammar
 
 if __name__ == '__main__':
     g = Grammar()
-    g.readFromFile("g.in")
+    g.readFromFile("g2.in")
     print(str(g))
     if g.checkCFG():
         print("The grammar is a CFG")
