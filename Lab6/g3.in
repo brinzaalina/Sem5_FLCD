@@ -1,0 +1,9 @@
+N = E T
+E = + ) ( id const
+S = E
+P =
+	E -> T
+	E -> E + T
+	T -> ( E )
+	T -> id
+	T -> const
