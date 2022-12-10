@@ -9,6 +9,16 @@ class State:
         self.closure_items = closure_items
         self.closure = closure
 
+    def get_all_symbols_after_dot(self):
+        result = []
+        for item in self.closure:
+            if item.dotPosition < len(item.rhs):
+                result.append(item.rhs[item.dotPosition])
+        return result
+
+    def __eq__(self, other):
+        return self.closure_items == other.closure_items
+
     def __str__(self):
         result = "s" + str(self.id) + " = closure({"
         for item in self.closure_items:
