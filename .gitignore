@@ -1,3 +1,4 @@
-/Lab2/.gradle/
-/Lab2/build/
-/Lab2/.idea/
+/*/.gradle/
+/*/build/
+/*/.idea/
+/*/__pycache__/
