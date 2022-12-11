@@ -1,0 +1,159 @@
+N = CompoundStatement Statement AssignStatement IfStatement WhileStatement FunctionCallStatement VarStatement ArrStatement Identifier Expression Letter RestOfIdentifier Digit NonZeroDigit Boolean IntExpression StringExpression BooleanExpression IntConstant StringConstant MathematicalOperator LogicalOperator Sign PositiveNumber RestOfNumber StringContent AcceptedSymbol ArrStatement ArrContent IntContentArr StringContentArr Condition RelationalOperator PrintCallArgument ForStatement
+E = ^ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z \n 0 1 2 3 4 5 6 7 8 9 True False + - * / == <= < >= > <> ( ) [ ] # , and or _ space : . ! " --> <-- if while for | len = ?
+S = CompoundStatement
+P =
+    CompoundStatement -> Statement \n CompoundStatement
+    CompoundStatement -> epsilon
+    Statement -> AssignStatement
+    Statement -> IfStatement
+    Statement -> WhileStatement
+    Statement -> FunctionCallStatement
+    Statement -> ForStatement
+    AssignStatement -> VarStatement
+    AssignStatement -> ArrStatement
+    VarStatement -> Identifier = Expression
+    Identifier -> ^ Letter RestOfIdentifier
+    RestOfIdentifier -> Letter RestOfIdentifier
+    RestOfIdentifier -> Digit RestOfIdentifier
+    RestOfIdentifier -> epsilon
+    Letter -> A
+    Letter -> B
+    Letter -> C
+    Letter -> D
+    Letter -> E
+    Letter -> F
+    Letter -> G
+    Letter -> H
+    Letter -> I
+    Letter -> J
+    Letter -> K
+    Letter -> L
+    Letter -> M
+    Letter -> N
+    Letter -> O
+    Letter -> P
+    Letter -> Q
+    Letter -> R
+    Letter -> S
+    Letter -> T
+    Letter -> U
+    Letter -> V
+    Letter -> W
+    Letter -> X
+    Letter -> Y
+    Letter -> Z
+    Letter -> a
+    Letter -> b
+    Letter -> c
+    Letter -> d
+    Letter -> e
+    Letter -> f
+    Letter -> g
+    Letter -> h
+    Letter -> i
+    Letter -> j
+    Letter -> k
+    Letter -> l
+    Letter -> m
+    Letter -> n
+    Letter -> o
+    Letter -> p
+    Letter -> q
+    Letter -> r
+    Letter -> s
+    Letter -> t
+    Letter -> u
+    Letter -> v
+    Letter -> w
+    Letter -> x
+    Letter -> y
+    Letter -> z
+    Digit -> 0
+    Digit -> 1
+    Digit -> 2
+    Digit -> 3
+    Digit -> 4
+    Digit -> 5
+    Digit -> 6
+    Digit -> 7
+    Digit -> 8
+    Digit -> 9
+    NonZeroDigit -> 1
+    NonZeroDigit -> 2
+    NonZeroDigit -> 3
+    NonZeroDigit -> 4
+    NonZeroDigit -> 5
+    NonZeroDigit -> 6
+    NonZeroDigit -> 7
+    NonZeroDigit -> 8
+    NonZeroDigit -> 9
+    Boolean -> True
+    Boolean -> False
+    Expression -> IntExpression
+    Expression -> StringExpression
+    Expression -> BooleanExpression
+    IntExpression-> IntConstant
+    IntExpression -> Identifier
+    IntExpression -> IntExpression MathematicalOperator IntExpression
+    IntExpression -> ( IntExpression MathematicalOperator IntExpression )
+    StringExpression -> StringConstant
+    StringExpression -> Identifier
+    IntConstant -> Sign PositiveNumber
+    IntConstant -> 0
+    Sign -> +
+    Sign -> -
+    Sign -> epsilon
+    PositiveNumber -> NonZeroDigit RestOfNumber
+    RestOfNumber -> Digit RestOfNumber
+    RestOfNumber -> epsilon
+    MathematicalOperator -> +
+    MathematicalOperator -> -
+    MathematicalOperator -> *
+    MathematicalOperator -> /
+    StringConstant -> " StringContent "
+    StringContent -> Letter StringContent
+    StringContent -> Digit StringContent
+    StringContent -> AcceptedSymbol StringContent
+    StringContent -> epsilon
+    AcceptedSymbol -> _
+    AcceptedSymbol -> ?
+    AcceptedSymbol -> space
+    AcceptedSymbol -> :
+    AcceptedSymbol -> *
+    AcceptedSymbol -> +
+    AcceptedSymbol -> =
+    AcceptedSymbol -> .
+    AcceptedSymbol -> !
+    BooleanExpression -> Boolean
+    BooleanExpression -> Identifier
+    BooleanExpression -> BooleanExpression LogicalOperator BooleanExpression
+    BooleanExpression -> ( BooleanExpression LogicalOperator BooleanExpression )
+    LogicalOperator -> and
+    LogicalOperator -> or
+    ArrStatement -> Identifier = ArrContent
+    ArrContent -> epsilon
+    ArrContent -> [ IntContentArr ]
+    ArrContent -> [ StringContentArr ]
+    IntContentArr -> epsilon
+    IntContentArr -> IntExpression
+    IntContentArr -> IntExpression , IntContentArr
+    StringContentArr -> epsilon
+    StringContentArr -> StringExpression
+    StringContentArr -> StringExpression , StringContentArr
+    IfStatement -> if ( Condition ) Statement
+    IfStatement -> if ( Condition ) # CompoundStatement #
+    Condition -> Expression RelationalOperator Expression
+    RelationalOperator -> ==
+    RelationalOperator -> <
+    RelationalOperator -> <=
+    RelationalOperator -> >
+    RelationalOperator -> >=
+    RelationalOperator -> <>
+    WhileStatement -> while ( Condition ) Statement
+    WhileStatement -> while ( Condition ) CompoundStatement
+    FunctionCallStatement -> <-- ( Identifier )
+    FunctionCallStatement -> --> ( PrintCallArgument )
+    FunctionCallStatement -> len ( StringExpression )
+    PrintCallArgument -> Identifier
+    PrintCallArgument -> Expression
+    ForStatement -> for VarStatement | Condition | VarStatement
