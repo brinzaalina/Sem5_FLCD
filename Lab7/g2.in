@@ -1,4 +1,4 @@
-N = CompoundStatement Statement AssignStatement IfStatement WhileStatement FunctionCallStatement VarStatement ArrStatement Identifier Expression Letter RestOfIdentifier Digit NonZeroDigit Boolean IntExpression StringExpression BooleanExpression IntConstant StringConstant MathematicalOperator LogicalOperator Sign PositiveNumber RestOfNumber StringContent AcceptedSymbol ArrStatement ArrContent IntContentArr StringContentArr Condition RelationalOperator PrintCallArgument ForStatement
+N = CompoundStatement Statement AssignStatement IfStatement WhileStatement FunctionCallStatement VarStatement ArrStatement Identifier Letter RestOfIdentifier Digit NonZeroDigit Boolean IntExpression StringExpression BooleanExpression IntConstant StringConstant BooleanTerm Sign PositiveNumber RestOfNumber StringContent AcceptedSymbol ArrStatement ArrContent IntContentArr StringContentArr Condition RelationalOperator PrintCallArgument ForStatement Term Factor
 E = ^ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z \n 0 1 2 3 4 5 6 7 8 9 True False + - * / == <= < >= > <> ( ) [ ] # , and or _ space : . ! " --> <-- if while for | len = ?
 S = CompoundStatement
 P =
@@ -11,7 +11,10 @@ P =
     Statement -> ForStatement
     AssignStatement -> VarStatement
     AssignStatement -> ArrStatement
-    VarStatement -> Identifier = Expression
+    VarStatement -> Identifier EqualExpression
+    EqualExpression -> = IntExpression
+    EqualExpression -> = StringExpression
+    EqualExpression -> = BooleanExpression
     Identifier -> ^ Letter RestOfIdentifier
     RestOfIdentifier -> Letter RestOfIdentifier
     RestOfIdentifier -> Digit RestOfIdentifier
@@ -89,13 +92,18 @@ P =
     NonZeroDigit -> 9
     Boolean -> True
     Boolean -> False
-    Expression -> IntExpression
-    Expression -> StringExpression
-    Expression -> BooleanExpression
-    IntExpression-> IntConstant
-    IntExpression -> Identifier
-    IntExpression -> IntExpression MathematicalOperator IntExpression
-    IntExpression -> ( IntExpression MathematicalOperator IntExpression )
+    IntExpression -> Term PlusMinusExpression
+    PlusMinusExpression -> + IntExpression
+    PlusMinusExpression -> - IntExpression
+    PlusMinusExpression -> + Term
+    PlusMinusExpression -> - Term
+    PlusMinusExpression -> epsilon
+    Term -> Term * Factor
+    Term -> Term / Factor
+    Term -> Factor
+    Factor -> ( IntExpression )
+    Factor -> IntConstant
+    Factor -> Identifier
     StringExpression -> StringConstant
     StringExpression -> Identifier
     IntConstant -> Sign PositiveNumber
@@ -106,10 +114,6 @@ P =
     PositiveNumber -> NonZeroDigit RestOfNumber
     RestOfNumber -> Digit RestOfNumber
     RestOfNumber -> epsilon
-    MathematicalOperator -> +
-    MathematicalOperator -> -
-    MathematicalOperator -> *
-    MathematicalOperator -> /
     StringConstant -> " StringContent "
     StringContent -> Letter StringContent
     StringContent -> Digit StringContent
@@ -124,36 +128,36 @@ P =
     AcceptedSymbol -> =
     AcceptedSymbol -> .
     AcceptedSymbol -> !
-    BooleanExpression -> Boolean
-    BooleanExpression -> Identifier
-    BooleanExpression -> BooleanExpression LogicalOperator BooleanExpression
-    BooleanExpression -> ( BooleanExpression LogicalOperator BooleanExpression )
-    LogicalOperator -> and
-    LogicalOperator -> or
+    BooleanExpression -> BooleanExpression and BooleanTerm
+    BooleanExpression -> BooleanExpression or BooleanTerm
+    BooleanExpression -> BooleanTerm
+    BooleanTerm -> ( BooleanExpression )
+    BooleanTerm -> Boolean
+    BooleanTerm -> Identifier
     ArrStatement -> Identifier = ArrContent
     ArrContent -> epsilon
+    ArrContent -> [ ]
+    ArrContent -> [ IntExpression ]
     ArrContent -> [ IntContentArr ]
+    ArrContent -> [ StringExpression ]
     ArrContent -> [ StringContentArr ]
-    IntContentArr -> epsilon
-    IntContentArr -> IntExpression
     IntContentArr -> IntExpression , IntContentArr
-    StringContentArr -> epsilon
-    StringContentArr -> StringExpression
     StringContentArr -> StringExpression , StringContentArr
     IfStatement -> if ( Condition ) Statement
     IfStatement -> if ( Condition ) # CompoundStatement #
-    Condition -> Expression RelationalOperator Expression
+    Condition -> IntExpression RelationalOperator IntExpression
     RelationalOperator -> ==
     RelationalOperator -> <
     RelationalOperator -> <=
     RelationalOperator -> >
     RelationalOperator -> >=
     RelationalOperator -> <>
-    WhileStatement -> while ( Condition ) Statement
     WhileStatement -> while ( Condition ) CompoundStatement
     FunctionCallStatement -> <-- ( Identifier )
     FunctionCallStatement -> --> ( PrintCallArgument )
     FunctionCallStatement -> len ( StringExpression )
     PrintCallArgument -> Identifier
-    PrintCallArgument -> Expression
+    PrintCallArgument -> IntExpression
+    PrintCallArgument -> StringExpression
+    PrintCallArgument -> BooleanExpression
     ForStatement -> for VarStatement | Condition | VarStatement
