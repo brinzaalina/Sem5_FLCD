@@ -1,163 +1,43 @@
-N = CompoundStatement Statement AssignStatement IfStatement WhileStatement FunctionCallStatement VarStatement ArrStatement Identifier Letter RestOfIdentifier Digit NonZeroDigit Boolean IntExpression StringExpression BooleanExpression IntConstant StringConstant BooleanTerm Sign PositiveNumber RestOfNumber StringContent AcceptedSymbol ArrStatement ArrContent IntContentArr StringContentArr Condition RelationalOperator PrintCallArgument ForStatement Term Factor
-E = ^ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z \n 0 1 2 3 4 5 6 7 8 9 True False + - * / == <= < >= > <> ( ) [ ] # , and or _ space : . ! " --> <-- if while for | len = ?
-S = CompoundStatement
+N = program statement statement_list expression_list array_statement compound_statement expression term factor assignment_statement if_statement while_statement for_statement for_header condition relation function_call_statement
+E = ; { } + - * / ) ( <-- --> identifier integer_constant string_constant array [ ] = if else while for < <= == != >= > \n | #
+S = compound_statement
 P =
-    CompoundStatement -> Statement \n CompoundStatement
-    CompoundStatement -> epsilon
-    Statement -> AssignStatement
-    Statement -> IfStatement
-    Statement -> WhileStatement
-    Statement -> FunctionCallStatement
-    Statement -> ForStatement
-    AssignStatement -> VarStatement
-    AssignStatement -> ArrStatement
-    VarStatement -> Identifier EqualExpression
-    EqualExpression -> = IntExpression
-    EqualExpression -> = StringExpression
-    EqualExpression -> = BooleanExpression
-    Identifier -> ^ Letter RestOfIdentifier
-    RestOfIdentifier -> Letter RestOfIdentifier
-    RestOfIdentifier -> Digit RestOfIdentifier
-    RestOfIdentifier -> epsilon
-    Letter -> A
-    Letter -> B
-    Letter -> C
-    Letter -> D
-    Letter -> E
-    Letter -> F
-    Letter -> G
-    Letter -> H
-    Letter -> I
-    Letter -> J
-    Letter -> K
-    Letter -> L
-    Letter -> M
-    Letter -> N
-    Letter -> O
-    Letter -> P
-    Letter -> Q
-    Letter -> R
-    Letter -> S
-    Letter -> T
-    Letter -> U
-    Letter -> V
-    Letter -> W
-    Letter -> X
-    Letter -> Y
-    Letter -> Z
-    Letter -> a
-    Letter -> b
-    Letter -> c
-    Letter -> d
-    Letter -> e
-    Letter -> f
-    Letter -> g
-    Letter -> h
-    Letter -> i
-    Letter -> j
-    Letter -> k
-    Letter -> l
-    Letter -> m
-    Letter -> n
-    Letter -> o
-    Letter -> p
-    Letter -> q
-    Letter -> r
-    Letter -> s
-    Letter -> t
-    Letter -> u
-    Letter -> v
-    Letter -> w
-    Letter -> x
-    Letter -> y
-    Letter -> z
-    Digit -> 0
-    Digit -> 1
-    Digit -> 2
-    Digit -> 3
-    Digit -> 4
-    Digit -> 5
-    Digit -> 6
-    Digit -> 7
-    Digit -> 8
-    Digit -> 9
-    NonZeroDigit -> 1
-    NonZeroDigit -> 2
-    NonZeroDigit -> 3
-    NonZeroDigit -> 4
-    NonZeroDigit -> 5
-    NonZeroDigit -> 6
-    NonZeroDigit -> 7
-    NonZeroDigit -> 8
-    NonZeroDigit -> 9
-    Boolean -> True
-    Boolean -> False
-    IntExpression -> Term PlusMinusExpression
-    PlusMinusExpression -> + IntExpression
-    PlusMinusExpression -> - IntExpression
-    PlusMinusExpression -> + Term
-    PlusMinusExpression -> - Term
-    PlusMinusExpression -> epsilon
-    Term -> Term * Factor
-    Term -> Term / Factor
-    Term -> Factor
-    Factor -> ( IntExpression )
-    Factor -> IntConstant
-    Factor -> Identifier
-    StringExpression -> StringConstant
-    StringExpression -> Identifier
-    IntConstant -> Sign PositiveNumber
-    IntConstant -> 0
-    Sign -> +
-    Sign -> -
-    Sign -> epsilon
-    PositiveNumber -> NonZeroDigit RestOfNumber
-    RestOfNumber -> Digit RestOfNumber
-    RestOfNumber -> epsilon
-    StringConstant -> " StringContent "
-    StringContent -> Letter StringContent
-    StringContent -> Digit StringContent
-    StringContent -> AcceptedSymbol StringContent
-    StringContent -> epsilon
-    AcceptedSymbol -> _
-    AcceptedSymbol -> ?
-    AcceptedSymbol -> space
-    AcceptedSymbol -> :
-    AcceptedSymbol -> *
-    AcceptedSymbol -> +
-    AcceptedSymbol -> =
-    AcceptedSymbol -> .
-    AcceptedSymbol -> !
-    BooleanExpression -> BooleanExpression and BooleanTerm
-    BooleanExpression -> BooleanExpression or BooleanTerm
-    BooleanExpression -> BooleanTerm
-    BooleanTerm -> ( BooleanExpression )
-    BooleanTerm -> Boolean
-    BooleanTerm -> Identifier
-    ArrStatement -> Identifier = ArrContent
-    ArrContent -> epsilon
-    ArrContent -> [ ]
-    ArrContent -> [ IntExpression ]
-    ArrContent -> [ IntContentArr ]
-    ArrContent -> [ StringExpression ]
-    ArrContent -> [ StringContentArr ]
-    IntContentArr -> IntExpression , IntContentArr
-    StringContentArr -> StringExpression , StringContentArr
-    IfStatement -> if ( Condition ) Statement
-    IfStatement -> if ( Condition ) # CompoundStatement #
-    Condition -> IntExpression RelationalOperator IntExpression
-    RelationalOperator -> ==
-    RelationalOperator -> <
-    RelationalOperator -> <=
-    RelationalOperator -> >
-    RelationalOperator -> >=
-    RelationalOperator -> <>
-    WhileStatement -> while ( Condition ) CompoundStatement
-    FunctionCallStatement -> <-- ( Identifier )
-    FunctionCallStatement -> --> ( PrintCallArgument )
-    FunctionCallStatement -> len ( StringExpression )
-    PrintCallArgument -> Identifier
-    PrintCallArgument -> IntExpression
-    PrintCallArgument -> StringExpression
-    PrintCallArgument -> BooleanExpression
-    ForStatement -> for VarStatement | Condition | VarStatement
+    compound_statement ::= statement \n
+    compound_statement ::= statement_list
+    statement_list ::= statement \n statement_list
+    statement ::= assignment_statement
+    statement ::= if_statement
+    statement ::= while_statement
+    statement ::= for_statement
+    statement ::= function_call_statement
+    expression ::= expression + term
+    expression ::= expression - term
+    expression ::= term
+    term ::= term * factor
+    term ::= term / factor
+    term ::= factor
+    factor ::= ( expression )
+    factor ::= identifier
+    factor ::= integer_constant
+    function_call_statement ::= <-- ( identifier )
+    function_call_statement ::= --> ( identifier )
+    function_call_statement ::= --> ( integer_constant )
+    function_call_statement ::= --> ( string_constant )
+    assignment_statement ::= identifier = expression
+    assignment_statement ::= identifier = array_statement
+    array_statement ::= [ ]
+    array_statement ::= [ expression_list ]
+    expression_list ::= expression
+    expression_list ::= expression , expression_list
+    if_statement ::= if ( condition ) \n # \n compound_statement #
+    if_statement ::= if ( condition ) \n # \n compound_statement # else \n # \n compound_statement #
+    while_statement ::= while ( condition ) \n # \n compound_statement #
+    for_statement ::= for for_header \n # \n compound_statement #
+    for_header ::= assignment_statement | condition | assignment_statement
+    condition ::= expression relation expression
+    relation ::= <
+    relation ::= <=
+    relation ::= ==
+    relation ::= !=
+    relation ::= >=
+    relation ::= >

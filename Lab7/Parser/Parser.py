@@ -1,8 +1,8 @@
 from collections import deque
 
-from Grammar import Grammar
-from Item import Item
-from State import State, ACTION
+from Parser.Grammar import Grammar
+from Parser.Item import Item
+from Parser.State import State, ACTION
 
 
 class Connection:
@@ -104,16 +104,14 @@ class Parser:
                     if prod_id is None:
                         raise Exception("Somthing went wrong!")
                     self.parsing_table[state.id] = (ACTION.REDUCE, prod_id)
-            elif state.action == ACTION.SHIFT:
+            elif state.action == ACTION.SHIFT or state.action == ACTION.SHIFT_REDUCE_CONFLICT:
                 if state.id not in self.parsing_table.keys():
-                    self.parsing_table[state.id] = (ACTION.SHIFT, {})
+                    self.parsing_table[state.id] = (state.action, {})
                 for conn in state_connections:
                     self.parsing_table[state.id][1][conn.symbol] = conn.final_state.id
             else:
                 if state.action == ACTION.REDUCE_REDUCE_CONFLICT:
                     raise Exception("Reduce reduce conflict!")
-                if state.action == ACTION.SHIFT_REDUCE_CONFLICT:
-                    raise Exception("Shift reduce conflict!")
 
     def get_production_number_from_grammar(self, state: State) -> int or None:
         for prod in self.grammar.P.keys():
@@ -128,6 +126,31 @@ class Parser:
             if conn.starting_state == state:
                 state_connections.append(conn)
         return state_connections
+
+    def get_state_by_id(self, state_id: int) -> State or None:
+        for state in self.canonical_collection:
+            if state.id == state_id:
+                return state
+        return None
+
+    def get_item_with_dot_at_end(self, state: State) -> Item or None:
+        for item in state.closure:
+            if item.dotPosition == len(item.rhs):
+                return item
+        return None
+
+    def get_production_number_shift_reduce_conflict(self, state_id: int) -> int or None:
+        state = self.get_state_by_id(state_id)
+        if state is None:
+            return None
+        item = self.get_item_with_dot_at_end(state)
+        if item is None:
+            return None
+        for prod in self.grammar.P.keys():
+            for prod_value in self.grammar.P[prod]:
+                if item.lhs == prod and item.rhs == prod_value[0]:
+                    return prod_value[1]
+        return None
 
     def parse_sequence(self, words: list) -> list:
         END_SIGN = '$'
@@ -147,11 +170,43 @@ class Parser:
                 while work_stack[-1] != END_SIGN:
                     work_stack.pop()
             elif self.parsing_table[work_stack[-1]][0] == ACTION.SHIFT:
-                top_state = work_stack[-1]
-                symbol = input_stack.pop()
-                work_stack.append(symbol)
-                new_top_state = self.parsing_table[top_state][1][symbol]
-                work_stack.append(new_top_state)
+                    top_state = work_stack[-1]
+                    symbol = input_stack.pop()
+                    work_stack.append(symbol)
+
+                    if symbol not in self.parsing_table[top_state][1].keys():
+                        raise Exception(f"Invalid symbol: {symbol} for goto of state {top_state}")
+
+                    new_top_state = self.parsing_table[top_state][1][symbol]
+
+                    work_stack.append(new_top_state)
+            elif self.parsing_table[work_stack[-1]][0] == ACTION.SHIFT_REDUCE_CONFLICT:
+                possible_symbol = input_stack[-1]
+                if (len(input_stack) == 1 and input_stack[-1] == END_SIGN) or \
+                        possible_symbol not in self.parsing_table[work_stack[-1]][1].keys():
+                    prod_id = self.get_production_number_shift_reduce_conflict(work_stack[-1])
+                    prod = self.grammar.get_production_by_id(prod_id)
+                    output_band.append(prod_id)
+                    index = 0
+                    while index < len(prod[1]):
+                        work_stack.pop()
+                        work_stack.pop()
+                        index += 1
+                    top_state = work_stack[-1]
+                    work_stack.append(prod[0])
+                    new_top_state = self.parsing_table[top_state][1][prod[0]]
+                    work_stack.append(new_top_state)
+                else:
+                    top_state = work_stack[-1]
+                    symbol = input_stack.pop()
+                    work_stack.append(symbol)
+
+                    if symbol not in self.parsing_table[top_state][1].keys():
+                        raise Exception(f"Invalid symbol: {symbol} for goto of state {top_state}")
+
+                    new_top_state = self.parsing_table[top_state][1][symbol]
+
+                    work_stack.append(new_top_state)
             elif self.parsing_table[work_stack[-1]][0] == ACTION.REDUCE:
                 prod = self.grammar.get_production_by_id(
                     self.parsing_table[work_stack[-1]][1]

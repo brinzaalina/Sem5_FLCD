@@ -1,0 +1,8 @@
+^numbers = [11, 6, 7, 30]
+
+^result = 0
+for ^i = 0 | ^i < len(^number) | ^i += 1
+#
+    ^result + ^numbers[^i] --> ^result
+#
+-->(^result)
