@@ -1,3 +1,11 @@
-^num1 = 5
-^7num2 = 2
-fir ^num
+^var1 = 8
+^var2 = 8
+^var3 = 5
+if (^var1 < ^var2)
+#
+    ^varMin = ^var1
+#
+if (^varMin > ^var3)
+    ^varMin = ^var3
+#
+-->(^varMin)

@@ -8,8 +8,8 @@ if __name__ == '__main__':
     lexical = LanguageLexical()
     token_identifier = TokenIdentifier(lexical)
 
-    print("Analyzing p3...")
-    p1_source = open("examples/p2.in", "r")
+    print("Analyzing p2...")
+    p1_source = open("examples/p1.in", "r")
     token_identifier.read_tokens(p1_source)
 
     tokens = []

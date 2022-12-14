@@ -2,7 +2,11 @@
 ^var2 = 8
 ^var3 = 5
 if (^var1 < ^var2)
+#
     ^varMin = ^var1
+#
 if (^varMin > ^var3)
+#
     ^varMin = ^var3
+#
 -->(^varMin)
