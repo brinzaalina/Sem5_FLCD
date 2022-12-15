@@ -102,7 +102,7 @@ class Parser:
                 elif state.action == ACTION.REDUCE:
                     prod_id = self.get_production_number_from_grammar(state)
                     if prod_id is None:
-                        raise Exception("Somthing went wrong!")
+                        raise Exception("Something went wrong!")
                     self.parsing_table[state.id] = (ACTION.REDUCE, prod_id)
             elif state.action == ACTION.SHIFT or state.action == ACTION.SHIFT_REDUCE_CONFLICT:
                 if state.id not in self.parsing_table.keys():
@@ -165,17 +165,19 @@ class Parser:
         for word in reversed(words):
             input_stack.append(word)
 
+        idx = 0
         while work_stack[-1] != END_SIGN or input_stack[-1] != END_SIGN:
             if self.parsing_table[work_stack[-1]][0] == ACTION.ACCEPT:
                 while work_stack[-1] != END_SIGN:
                     work_stack.pop()
             elif self.parsing_table[work_stack[-1]][0] == ACTION.SHIFT:
+                    idx += 1
                     top_state = work_stack[-1]
                     symbol = input_stack.pop()
                     work_stack.append(symbol)
 
                     if symbol not in self.parsing_table[top_state][1].keys():
-                        raise Exception(f"Invalid symbol: {symbol} for goto of state {top_state}")
+                        raise Exception(f"Index {idx} -> Invalid symbol: {symbol} for goto of state {top_state}")
 
                     new_top_state = self.parsing_table[top_state][1][symbol]
 
@@ -197,12 +199,13 @@ class Parser:
                     new_top_state = self.parsing_table[top_state][1][prod[0]]
                     work_stack.append(new_top_state)
                 else:
+                    idx += 1
                     top_state = work_stack[-1]
                     symbol = input_stack.pop()
                     work_stack.append(symbol)
 
                     if symbol not in self.parsing_table[top_state][1].keys():
-                        raise Exception(f"Invalid symbol: {symbol} for goto of state {top_state}")
+                        raise Exception(f"Index {idx} -> Invalid symbol: {symbol} for goto of state {top_state}")
 
                     new_top_state = self.parsing_table[top_state][1][symbol]
 
